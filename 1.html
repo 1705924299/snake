@@ -7,12 +7,21 @@
   <style>
     canvas {
       border: 1px solid black;
+      display: block;
+      margin: 0 auto;
+      background-color: #f2f2f2;
+    }
+    #score {
+      text-align: center;
+      font-size: 20px;
     }
   </style>
 </head>
 <body>
-  <canvas id="gameCanvas" width="1500" height="700"></canvas>
-  <div id="score">0</div>
+  <div id="score">Score: 0</div>
+  <canvas id="gameCanvas" width="1200" height="700"></canvas>
+
+  <!-- 引入游戏的 JS 文件 -->
   <script src="2.js"></script>
 </body>
 </html>

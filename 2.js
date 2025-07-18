@@ -14,7 +14,7 @@ let snake = [
 ];
 
 let dx = 10; // 水平速度
-let dy = 0;  
+let dy = 0;  // 垂直速度
 
 let score = 0; // 初始化分数
 
@@ -61,25 +61,19 @@ function drawFood() {
 }
 
 // 移动蛇
-    function advanceSnake() {
-      // Create the new Snake's head
-      const head = {x: snake[0].x + dx, y: snake[0].y + dy};
-      // Add the new head to the beginning of snake body
-      snake.unshift(head);
+function advanceSnake() {
+  const head = {x: snake[0].x + dx, y: snake[0].y + dy};
+  snake.unshift(head); // 加入新的蛇头
 
-      const didEatFood = snake[0].x === foodX && snake[0].y === foodY;
-      if (didEatFood) {
-        // Increase score
-        score += 10;
-        // Display score on screen
-        document.getElementById('score').innerHTML = score;
-        // Create new food
-        createFood();
-      } else {
-        // Remove the last part of snake body
-        snake.pop();
-      }
-    }
+  const didEatFood = snake[0].x === foodX && snake[0].y === foodY;
+  if (didEatFood) {
+    score += 10;
+    document.getElementById('score').innerHTML = `Score: ${score}`;
+    createFood(); // 创建新食物
+  } else {
+    snake.pop(); // 删除蛇尾
+  }
+}
 
 // 检查游戏是否结束
 function didGameEnd() {
@@ -98,19 +92,24 @@ function didGameEnd() {
   return hitLeftWall || hitRightWall || hitTopWall || hitBottomWall;
 }
 
+let frameCount = 0; // 新增帧计数器
+
 // 自动移动蛇并保持平滑的动画
 function moveSnake() {
-  setTimeout(function onTick() {
+  frameCount++;
+  // 每3帧才移动一次蛇，降低速度约为原来的1/3
+  if (frameCount % 10 === 0) {
     if (didGameEnd()) {
       alert("Game Over! Final Score: " + score);
       return;
     }
     ctx.clearRect(0, 0, canvas.width, canvas.height);  // 清除画布
+
     advanceSnake();  // 先更新蛇的位置
-    drawFood();      // 再画食物
-    drawSnake();     // 最后画蛇
-    moveSnake();     // 继续移动
-  }, 40);
+    drawFood();      // 绘制食物
+    drawSnake();     // 绘制蛇
+  }
+  requestAnimationFrame(moveSnake);  // 使用requestAnimationFrame平滑渲染
 }
 
 // 控制键盘事件（通过箭头键来控制蛇的移动）
